@@ -1,11 +1,6 @@
 {
   "hosting": {
-    "public": "dist/acemanager/browser",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
+    "public": "dist/acemanager---tennis-admin/browser",
     "rewrites": [
       {
         "source": "**",
