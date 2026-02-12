@@ -193,7 +193,7 @@ import { TournamentStore, Match } from '../services/tournament.store';
     .animate-fade-in { animation: fadeIn 0.3s ease-out; }
     /* Custom Scrollbar for bracket */
     .custom-scrollbar::-webkit-scrollbar { height: 8px; }
-    .custom-scrollbar::-webkit-scrollbar-track { bg-slate-900; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: #0f172a; }
     .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #334155; border-radius: 4px; }
   `]
 })
