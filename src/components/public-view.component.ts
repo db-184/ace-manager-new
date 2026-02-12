@@ -9,7 +9,6 @@ import { TournamentStore, Match } from '../services/tournament.store';
   imports: [CommonModule, FormsModule],
   template: `
     <div class="min-h-screen bg-slate-950 flex flex-col text-slate-200">
-      <!-- Header -->
       <header class="bg-slate-900 border-b border-slate-800 shadow-lg sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="flex items-center w-full md:w-auto">
@@ -25,21 +24,20 @@ import { TournamentStore, Match } from '../services/tournament.store';
                 </div>
             </div>
             
-             <!-- Search -->
              <div class="relative w-full md:max-w-xs">
                  <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                      <i class="fas fa-search text-slate-500"></i>
                  </div>
                  <input 
                     type="text" 
-                    [(ngModel)]="searchQuery" 
+                    [ngModel]="searchQuery()" 
+                    (ngModelChange)="searchQuery.set($event)"
                     placeholder="Find player..." 
                     class="block w-full pl-10 pr-3 py-2 border border-slate-700 rounded-full leading-5 bg-slate-800 text-white placeholder-slate-500 focus:outline-none focus:placeholder-slate-400 focus:ring-1 focus:ring-[#ccff00] focus:border-[#ccff00] sm:text-sm transition duration-150 ease-in-out"
                   >
              </div>
         </div>
         
-        <!-- Tab Nav -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
             <nav class="flex space-x-1" aria-label="Tabs">
                 <button 
@@ -69,9 +67,7 @@ import { TournamentStore, Match } from '../services/tournament.store';
 
       <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
           
-          <!-- Standings Tab -->
-          @if (activeTab() === 'standings') {
-              <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 animate-fade-in">
+          <div *ngIf="activeTab() === 'standings'" class="grid grid-cols-1 lg:grid-cols-2 gap-8 animate-fade-in">
                 <div *ngFor="let group of filteredGroups()" class="bg-slate-900 rounded-xl shadow-lg border border-slate-800 overflow-hidden">
                     <div class="bg-gradient-to-r from-slate-900 to-slate-800 px-6 py-3 border-b border-slate-800 flex justify-between items-center">
                          <h3 class="font-bold text-white uppercase tracking-wider">{{ group.name }}</h3>
@@ -94,7 +90,7 @@ import { TournamentStore, Match } from '../services/tournament.store';
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500 font-mono">{{ i + 1 }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-white flex items-center">
                                         {{ stat.name }}
-                                        @if(i < 2) { <span class="ml-2 w-1.5 h-1.5 rounded-full bg-[#ccff00]"></span> }
+                                        <span *ngIf="i < 2" class="ml-2 w-1.5 h-1.5 rounded-full bg-[#ccff00]"></span>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-center font-bold text-[#ccff00]">{{ stat.points }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-center text-slate-400 font-mono">{{ stat.gamesWon }}-{{ stat.gamesLost }}</td>
@@ -103,12 +99,9 @@ import { TournamentStore, Match } from '../services/tournament.store';
                         </table>
                     </div>
                 </div>
-              </div>
-          }
+          </div>
 
-          <!-- Matches Tab -->
-          @if (activeTab() === 'matches') {
-              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 animate-fade-in">
+          <div *ngIf="activeTab() === 'matches'" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 animate-fade-in">
                   <div *ngFor="let match of filteredMatches()" class="bg-slate-900 rounded-xl shadow-md border border-slate-800 p-5 flex flex-col justify-center hover:border-slate-600 transition-colors">
                       <div class="text-xs text-slate-500 uppercase tracking-widest mb-4 font-bold text-center border-b border-slate-800 pb-2">{{ getGroupName(match.groupId) }}</div>
                       <div class="flex justify-between items-center">
@@ -116,11 +109,8 @@ import { TournamentStore, Match } from '../services/tournament.store';
                             {{ match.p1 }}
                           </div>
                           <div class="mx-4 flex flex-col items-center min-w-[70px]">
-                               @if (match.isFinished) {
-                                   <span class="font-black text-white text-lg tracking-wide">{{ match.score }}</span>
-                               } @else {
-                                   <span class="text-slate-600 text-xs font-bold bg-slate-800 px-2 py-1 rounded">VS</span>
-                               }
+                               <span *ngIf="match.isFinished" class="font-black text-white text-lg tracking-wide">{{ match.score }}</span>
+                               <span *ngIf="!match.isFinished" class="text-slate-600 text-xs font-bold bg-slate-800 px-2 py-1 rounded">VS</span>
                           </div>
                           <div class="flex-1 text-left font-medium text-slate-300" [class.text-[#ccff00]]="match.winner === match.p2 && match.isFinished" [class.font-bold]="match.winner === match.p2 && match.isFinished">
                             {{ match.p2 }}
@@ -131,19 +121,14 @@ import { TournamentStore, Match } from '../services/tournament.store';
                   <div *ngIf="filteredMatches().length === 0" class="col-span-full text-center py-20 bg-slate-900/50 rounded-xl border border-dashed border-slate-800">
                       <p class="text-slate-500 text-lg">No matches found matching your search.</p>
                   </div>
-              </div>
-          }
+          </div>
 
-          <!-- Bracket Tab -->
-          @if (activeTab() === 'bracket') {
-              <div class="overflow-x-auto pb-12 animate-fade-in custom-scrollbar">
-                  @if (store.knockoutMatches().length === 0) {
-                      <div class="text-center py-20 bg-slate-900/50 rounded-xl border border-dashed border-slate-800">
-                          <i class="fas fa-sitemap text-slate-700 text-5xl mb-4"></i>
-                          <p class="text-slate-500 text-lg">Knockout stage has not started yet.</p>
-                      </div>
-                  } @else {
-                      <div class="flex justify-around items-center min-w-[800px] gap-12">
+          <div *ngIf="activeTab() === 'bracket'" class="overflow-x-auto pb-12 animate-fade-in custom-scrollbar">
+                  <div *ngIf="store.knockoutMatches().length === 0" class="text-center py-20 bg-slate-900/50 rounded-xl border border-dashed border-slate-800">
+                      <i class="fas fa-sitemap text-slate-700 text-5xl mb-4"></i>
+                      <p class="text-slate-500 text-lg">Knockout stage has not started yet.</p>
+                  </div>
+                  <div *ngIf="store.knockoutMatches().length > 0" class="flex justify-around items-center min-w-[800px] gap-12">
                           <div *ngFor="let round of rounds()" class="flex flex-col justify-around gap-16 relative py-12">
                               <h3 class="absolute top-0 w-full text-center font-bold text-slate-500 uppercase tracking-[0.2em] text-xs">{{ getRoundName(round) }}</h3>
                               
@@ -159,7 +144,7 @@ import { TournamentStore, Match } from '../services/tournament.store';
                                                [class.text-slate-400]="match.winner !== match.p1"
                                                [class.bg-[#ccff00]/10]="isMatchHighlighted(match) && match.p1.toLowerCase().includes(searchQuery().toLowerCase())">
                                               <span class="truncate font-medium" [class.text-slate-600]="match.p1 === 'TBD'">{{ match.p1 }}</span>
-                                              @if(match.isFinished && match.winner === match.p1){ <i class="fas fa-check text-[#ccff00] text-xs"></i> }
+                                              <i *ngIf="match.isFinished && match.winner === match.p1" class="fas fa-check text-[#ccff00] text-xs"></i>
                                           </div>
                                           <div class="border-t border-slate-800"></div>
                                           <div class="flex justify-between items-center text-sm p-1 rounded"
@@ -167,7 +152,7 @@ import { TournamentStore, Match } from '../services/tournament.store';
                                                [class.text-slate-400]="match.winner !== match.p2"
                                                [class.bg-[#ccff00]/10]="isMatchHighlighted(match) && match.p2.toLowerCase().includes(searchQuery().toLowerCase())">
                                               <span class="truncate font-medium" [class.text-slate-600]="match.p2 === 'TBD'">{{ match.p2 }}</span>
-                                              @if(match.isFinished && match.winner === match.p2){ <i class="fas fa-check text-[#ccff00] text-xs"></i> }
+                                              <i *ngIf="match.isFinished && match.winner === match.p2" class="fas fa-check text-[#ccff00] text-xs"></i>
                                           </div>
                                       </div>
                                       <div class="bg-slate-950 px-2 py-1 text-xs text-center text-[#ccff00] font-mono border-t border-slate-800">
@@ -175,16 +160,11 @@ import { TournamentStore, Match } from '../services/tournament.store';
                                       </div>
                                   </div>
                                   
-                                   @if (round !== 'F') {
-                                     <div class="absolute top-1/2 -right-12 w-12 h-px bg-slate-700 hidden md:block"></div>
-                                  }
+                                   <div *ngIf="round !== 'F'" class="absolute top-1/2 -right-12 w-12 h-px bg-slate-700 hidden md:block"></div>
                               </div>
                           </div>
-                      </div>
-                  }
-              </div>
-          }
-
+                  </div>
+          </div>
       </main>
     </div>
   `,
@@ -202,23 +182,17 @@ export class PublicViewComponent {
   activeTab = signal<'standings' | 'matches' | 'bracket'>('standings');
   searchQuery = signal('');
 
-  // Standings Logic
   getStandings(groupId: string) {
       return this.store.getGroupStandings(groupId);
   }
 
   filteredGroups() {
-      // If searching, show all groups so we can find players inside.
-      // Alternatively, could filter groups that contain the player.
       return this.store.groups();
   }
 
-  // Matches Logic
   filteredMatches() {
       const q = this.searchQuery().toLowerCase();
       const rrMatches = this.store.matches();
-      // Only show RR matches in matches tab? Or both?
-      // Let's show RR matches in Matches tab.
       if (!q) return rrMatches;
       return rrMatches.filter(m => m.p1.toLowerCase().includes(q) || m.p2.toLowerCase().includes(q));
   }
@@ -227,7 +201,6 @@ export class PublicViewComponent {
       return this.store.groups().find(g => g.id === groupId)?.name || '';
   }
 
-  // Bracket Logic (Copied simple version from KnockoutComponent for read-only)
   rounds = computed(() => {
       const matches = this.store.knockoutMatches();
       const roundNames = matches.map(m => m.round).filter((r): r is string => !!r);
