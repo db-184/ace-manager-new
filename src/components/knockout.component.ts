@@ -21,59 +21,55 @@ import { TournamentStore, Match } from '../services/tournament.store';
 
       <!-- Bracket Container -->
       <div class="flex justify-around items-center min-w-[800px] gap-12">
-          @for (round of rounds(); track round) {
-              <div class="flex flex-col justify-around gap-20 relative py-12">
-                  <h3 class="absolute top-0 w-full text-center font-bold text-slate-500 uppercase tracking-[0.2em] text-xs">{{ getRoundName(round) }}</h3>
-                  
-                  @for (match of getMatchesForRound(round); track match.id) {
-                      <div class="relative group w-72">
-                          <!-- Card -->
-                          <div class="bg-slate-900 border rounded-lg shadow-lg overflow-hidden transition-all hover:border-slate-600 hover:shadow-[0_0_15px_rgba(0,0,0,0.5)]" 
-                               [class.border-[#ccff00]]="match.isFinished" 
-                               [class.border-slate-700]="!match.isFinished">
-                              
-                              <div class="p-4 space-y-3">
-                                  <!-- Player 1 -->
-                                  <div class="flex justify-between items-center p-2 rounded transition-colors" 
-                                       [class.bg-[#ccff00]/10]="match.winner === match.p1 && match.isFinished"
-                                       [class.bg-slate-800]="!(match.winner === match.p1 && match.isFinished)">
-                                      <span class="font-bold text-sm truncate text-white" [class.text-slate-500]="match.p1 === 'TBD'">{{ match.p1 }}</span>
-                                      @if (match.isFinished && match.winner === match.p1) { <i class="fas fa-check text-[#ccff00] text-xs"></i> }
-                                  </div>
-                                  
-                                  <!-- VS / Score -->
-                                  <div class="border-t border-dashed border-slate-700 my-1"></div>
-
-                                  <!-- Player 2 -->
-                                  <div class="flex justify-between items-center p-2 rounded transition-colors" 
-                                       [class.bg-[#ccff00]/10]="match.winner === match.p2 && match.isFinished"
-                                       [class.bg-slate-800]="!(match.winner === match.p2 && match.isFinished)">
-                                      <span class="font-bold text-sm truncate text-white" [class.text-slate-500]="match.p2 === 'TBD'">{{ match.p2 }}</span>
-                                      @if (match.isFinished && match.winner === match.p2) { <i class="fas fa-check text-[#ccff00] text-xs"></i> }
-                                  </div>
-                              </div>
-                              
-                              <!-- Footer Actions -->
-                              <div class="bg-slate-950 px-4 py-2 flex justify-between items-center border-t border-slate-800">
-                                  <span class="text-xs font-mono text-[#ccff00] font-bold tracking-wider">{{ match.score || '- -' }}</span>
-                                  <button 
-                                      (click)="openScoreModal(match)" 
-                                      [disabled]="match.p1 === 'TBD' || match.p2 === 'TBD'"
-                                      class="text-xs bg-slate-800 border border-slate-700 text-slate-300 px-3 py-1 rounded hover:bg-[#ccff00] hover:text-black hover:border-[#ccff00] disabled:opacity-30 disabled:cursor-not-allowed transition-colors uppercase font-bold"
-                                  >
-                                      {{ match.isFinished ? 'Edit' : 'Score' }}
-                                  </button>
-                              </div>
+          <div *ngFor="let round of rounds()" class="flex flex-col justify-around gap-20 relative py-12">
+              <h3 class="absolute top-0 w-full text-center font-bold text-slate-500 uppercase tracking-[0.2em] text-xs">{{ getRoundName(round) }}</h3>
+              
+              <div *ngFor="let match of getMatchesForRound(round)" class="relative group w-72">
+                  <!-- Card -->
+                  <div class="bg-slate-900 border rounded-lg shadow-lg overflow-hidden transition-all hover:border-slate-600 hover:shadow-[0_0_15px_rgba(0,0,0,0.5)]" 
+                       [class.border-[#ccff00]]="match.isFinished" 
+                       [class.border-slate-700]="!match.isFinished">
+                      
+                      <div class="p-4 space-y-3">
+                          <!-- Player 1 -->
+                          <div class="flex justify-between items-center p-2 rounded transition-colors" 
+                               [class.bg-[#ccff00]/10]="match.winner === match.p1 && match.isFinished"
+                               [class.bg-slate-800]="!(match.winner === match.p1 && match.isFinished)">
+                              <span class="font-bold text-sm truncate text-white" [class.text-slate-500]="match.p1 === 'TBD'">{{ match.p1 }}</span>
+                              @if (match.isFinished && match.winner === match.p1) { <i class="fas fa-check text-[#ccff00] text-xs"></i> }
                           </div>
                           
-                          <!-- Connectors Visuals -->
-                          @if (round !== 'F') {
-                             <div class="absolute top-1/2 -right-12 w-12 h-0.5 bg-slate-700 hidden md:block"></div>
-                          }
+                          <!-- VS / Score -->
+                          <div class="border-t border-dashed border-slate-700 my-1"></div>
+
+                          <!-- Player 2 -->
+                          <div class="flex justify-between items-center p-2 rounded transition-colors" 
+                               [class.bg-[#ccff00]/10]="match.winner === match.p2 && match.isFinished"
+                               [class.bg-slate-800]="!(match.winner === match.p2 && match.isFinished)">
+                              <span class="font-bold text-sm truncate text-white" [class.text-slate-500]="match.p2 === 'TBD'">{{ match.p2 }}</span>
+                              @if (match.isFinished && match.winner === match.p2) { <i class="fas fa-check text-[#ccff00] text-xs"></i> }
+                          </div>
                       </div>
+                      
+                      <!-- Footer Actions -->
+                      <div class="bg-slate-950 px-4 py-2 flex justify-between items-center border-t border-slate-800">
+                          <span class="text-xs font-mono text-[#ccff00] font-bold tracking-wider">{{ match.score || '- -' }}</span>
+                          <button 
+                              (click)="openScoreModal(match)" 
+                              [disabled]="match.p1 === 'TBD' || match.p2 === 'TBD'"
+                              class="text-xs bg-slate-800 border border-slate-700 text-slate-300 px-3 py-1 rounded hover:bg-[#ccff00] hover:text-black hover:border-[#ccff00] disabled:opacity-30 disabled:cursor-not-allowed transition-colors uppercase font-bold"
+                          >
+                              {{ match.isFinished ? 'Edit' : 'Score' }}
+                          </button>
+                      </div>
+                  </div>
+                  
+                  <!-- Connectors Visuals -->
+                  @if (round !== 'F') {
+                     <div class="absolute top-1/2 -right-12 w-12 h-0.5 bg-slate-700 hidden md:block"></div>
                   }
               </div>
-          }
+          </div>
       </div>
 
        <div class="mt-12 text-center sticky left-0 border-t border-slate-800 pt-6">
