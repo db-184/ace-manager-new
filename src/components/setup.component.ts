@@ -56,16 +56,15 @@ declare var process: any;
         <div>
           <label class="block text-sm font-medium text-slate-400 mb-2 uppercase tracking-wider">Set Count</label>
           <div class="flex space-x-4">
-            @for (count of [1, 3, 5]; track count) {
-              <label class="flex-1 flex items-center justify-center space-x-2 cursor-pointer p-4 border rounded-lg hover:bg-slate-800 transition-all" 
-                [class.border-[#ccff00]]="settings.setCount === count"
-                [class.bg-slate-800]="settings.setCount === count"
-                [class.border-slate-700]="settings.setCount !== count"
-              >
-                <input type="radio" name="setCount" [value]="count" [(ngModel)]="settings.setCount" class="text-[#ccff00] focus:ring-[#ccff00] bg-slate-900 border-slate-600">
-                <span class="text-white font-medium">{{ count }} Set{{ count > 1 ? 's' : '' }}</span>
-              </label>
-            }
+            <label *ngFor="let count of [1, 3, 5]"
+              class="flex-1 flex items-center justify-center space-x-2 cursor-pointer p-4 border rounded-lg hover:bg-slate-800 transition-all" 
+              [class.border-[#ccff00]]="settings.setCount === count"
+              [class.bg-slate-800]="settings.setCount === count"
+              [class.border-slate-700]="settings.setCount !== count"
+            >
+              <input type="radio" name="setCount" [value]="count" [(ngModel)]="settings.setCount" class="text-[#ccff00] focus:ring-[#ccff00] bg-slate-900 border-slate-600">
+              <span class="text-white font-medium">{{ count }} Set{{ count > 1 ? 's' : '' }}</span>
+            </label>
           </div>
         </div>
 
@@ -84,18 +83,16 @@ declare var process: any;
           <div class="animate-fade-in bg-slate-800/50 p-4 rounded-lg border border-slate-700">
             <label class="block text-sm font-medium text-[#ccff00] mb-3 uppercase tracking-wider">Knockout Qualification Cutoff</label>
             <div class="grid grid-cols-3 gap-3">
-              @for (stage of ['Round of 16', 'Round of 8', 'Semi-finals']; track stage) {
-                <button 
-                   type="button"
-                   (click)="settings.knockoutStart = $any(stage)"
-                   [class]="settings.knockoutStart === stage 
-                      ? 'bg-[#ccff00] text-black border-transparent font-bold shadow-[0_0_10px_rgba(204,255,0,0.4)]' 
-                      : 'bg-slate-900 text-slate-400 border-slate-700 hover:border-slate-500 hover:text-white'"
-                   class="border rounded-lg py-3 px-2 text-sm focus:outline-none transition-all"
-                >
-                  {{ stage }}
-                </button>
-              }
+              <button *ngFor="let stage of ['Round of 16', 'Round of 8', 'Semi-finals']"
+                 type="button"
+                 (click)="settings.knockoutStart = $any(stage)"
+                 [class]="settings.knockoutStart === stage 
+                    ? 'bg-[#ccff00] text-black border-transparent font-bold shadow-[0_0_10px_rgba(204,255,0,0.4)]' 
+                    : 'bg-slate-900 text-slate-400 border-slate-700 hover:border-slate-500 hover:text-white'"
+                 class="border rounded-lg py-3 px-2 text-sm focus:outline-none transition-all"
+              >
+                {{ stage }}
+              </button>
             </div>
           </div>
         }
