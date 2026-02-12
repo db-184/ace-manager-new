@@ -72,69 +72,65 @@ import { TournamentStore, Match } from '../services/tournament.store';
           <!-- Standings Tab -->
           @if (activeTab() === 'standings') {
               <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 animate-fade-in">
-                @for (group of filteredGroups(); track group.id) {
-                    <div class="bg-slate-900 rounded-xl shadow-lg border border-slate-800 overflow-hidden">
-                        <div class="bg-gradient-to-r from-slate-900 to-slate-800 px-6 py-3 border-b border-slate-800 flex justify-between items-center">
-                             <h3 class="font-bold text-white uppercase tracking-wider">{{ group.name }}</h3>
-                             <span class="text-xs text-[#ccff00] font-mono border border-[#ccff00]/30 px-2 py-0.5 rounded">RR Stage</span>
-                        </div>
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-slate-800">
-                                <thead class="bg-slate-950">
-                                    <tr>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Pos</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Player</th>
-                                        <th class="px-6 py-3 text-center text-xs font-medium text-slate-500 uppercase tracking-wider">Pts</th>
-                                        <th class="px-6 py-3 text-center text-xs font-medium text-slate-500 uppercase tracking-wider">W-L (G)</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-slate-900 divide-y divide-slate-800">
-                                    @for (stat of getStandings(group.id); track stat.playerId; let i = $index) {
-                                        <tr [class.bg-[#ccff00]/10]="searchQuery() && stat.name.toLowerCase().includes(searchQuery().toLowerCase())" class="hover:bg-slate-800/50 transition-colors">
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500 font-mono">{{ i + 1 }}</td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-white flex items-center">
-                                                {{ stat.name }}
-                                                @if(i < 2) { <span class="ml-2 w-1.5 h-1.5 rounded-full bg-[#ccff00]"></span> }
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-center font-bold text-[#ccff00]">{{ stat.points }}</td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-center text-slate-400 font-mono">{{ stat.gamesWon }}-{{ stat.gamesLost }}</td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
+                <div *ngFor="let group of filteredGroups()" class="bg-slate-900 rounded-xl shadow-lg border border-slate-800 overflow-hidden">
+                    <div class="bg-gradient-to-r from-slate-900 to-slate-800 px-6 py-3 border-b border-slate-800 flex justify-between items-center">
+                         <h3 class="font-bold text-white uppercase tracking-wider">{{ group.name }}</h3>
+                         <span class="text-xs text-[#ccff00] font-mono border border-[#ccff00]/30 px-2 py-0.5 rounded">RR Stage</span>
                     </div>
-                }
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-slate-800">
+                            <thead class="bg-slate-950">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Pos</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Player</th>
+                                    <th class="px-6 py-3 text-center text-xs font-medium text-slate-500 uppercase tracking-wider">Pts</th>
+                                    <th class="px-6 py-3 text-center text-xs font-medium text-slate-500 uppercase tracking-wider">W-L (G)</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-slate-900 divide-y divide-slate-800">
+                                <tr *ngFor="let stat of getStandings(group.id); let i = index" 
+                                    [class.bg-[#ccff00]/10]="searchQuery() && stat.name.toLowerCase().includes(searchQuery().toLowerCase())" 
+                                    class="hover:bg-slate-800/50 transition-colors">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500 font-mono">{{ i + 1 }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-white flex items-center">
+                                        {{ stat.name }}
+                                        @if(i < 2) { <span class="ml-2 w-1.5 h-1.5 rounded-full bg-[#ccff00]"></span> }
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-center font-bold text-[#ccff00]">{{ stat.points }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-center text-slate-400 font-mono">{{ stat.gamesWon }}-{{ stat.gamesLost }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
               </div>
           }
 
           <!-- Matches Tab -->
           @if (activeTab() === 'matches') {
               <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 animate-fade-in">
-                  @for (match of filteredMatches(); track match.id) {
-                      <div class="bg-slate-900 rounded-xl shadow-md border border-slate-800 p-5 flex flex-col justify-center hover:border-slate-600 transition-colors">
-                          <div class="text-xs text-slate-500 uppercase tracking-widest mb-4 font-bold text-center border-b border-slate-800 pb-2">{{ getGroupName(match.groupId) }}</div>
-                          <div class="flex justify-between items-center">
-                              <div class="flex-1 text-right font-medium text-slate-300" [class.text-[#ccff00]]="match.winner === match.p1 && match.isFinished" [class.font-bold]="match.winner === match.p1 && match.isFinished">
-                                {{ match.p1 }}
-                              </div>
-                              <div class="mx-4 flex flex-col items-center min-w-[70px]">
-                                   @if (match.isFinished) {
-                                       <span class="font-black text-white text-lg tracking-wide">{{ match.score }}</span>
-                                   } @else {
-                                       <span class="text-slate-600 text-xs font-bold bg-slate-800 px-2 py-1 rounded">VS</span>
-                                   }
-                              </div>
-                              <div class="flex-1 text-left font-medium text-slate-300" [class.text-[#ccff00]]="match.winner === match.p2 && match.isFinished" [class.font-bold]="match.winner === match.p2 && match.isFinished">
-                                {{ match.p2 }}
-                              </div>
+                  <div *ngFor="let match of filteredMatches()" class="bg-slate-900 rounded-xl shadow-md border border-slate-800 p-5 flex flex-col justify-center hover:border-slate-600 transition-colors">
+                      <div class="text-xs text-slate-500 uppercase tracking-widest mb-4 font-bold text-center border-b border-slate-800 pb-2">{{ getGroupName(match.groupId) }}</div>
+                      <div class="flex justify-between items-center">
+                          <div class="flex-1 text-right font-medium text-slate-300" [class.text-[#ccff00]]="match.winner === match.p1 && match.isFinished" [class.font-bold]="match.winner === match.p1 && match.isFinished">
+                            {{ match.p1 }}
+                          </div>
+                          <div class="mx-4 flex flex-col items-center min-w-[70px]">
+                               @if (match.isFinished) {
+                                   <span class="font-black text-white text-lg tracking-wide">{{ match.score }}</span>
+                               } @else {
+                                   <span class="text-slate-600 text-xs font-bold bg-slate-800 px-2 py-1 rounded">VS</span>
+                               }
+                          </div>
+                          <div class="flex-1 text-left font-medium text-slate-300" [class.text-[#ccff00]]="match.winner === match.p2 && match.isFinished" [class.font-bold]="match.winner === match.p2 && match.isFinished">
+                            {{ match.p2 }}
                           </div>
                       </div>
-                  } @empty {
-                      <div class="col-span-full text-center py-20 bg-slate-900/50 rounded-xl border border-dashed border-slate-800">
-                          <p class="text-slate-500 text-lg">No matches found matching your search.</p>
-                      </div>
-                  }
+                  </div>
+                  
+                  <div *ngIf="filteredMatches().length === 0" class="col-span-full text-center py-20 bg-slate-900/50 rounded-xl border border-dashed border-slate-800">
+                      <p class="text-slate-500 text-lg">No matches found matching your search.</p>
+                  </div>
               </div>
           }
 
@@ -148,46 +144,42 @@ import { TournamentStore, Match } from '../services/tournament.store';
                       </div>
                   } @else {
                       <div class="flex justify-around items-center min-w-[800px] gap-12">
-                          @for (round of rounds(); track round) {
-                              <div class="flex flex-col justify-around gap-16 relative py-12">
-                                  <h3 class="absolute top-0 w-full text-center font-bold text-slate-500 uppercase tracking-[0.2em] text-xs">{{ getRoundName(round) }}</h3>
-                                  
-                                  @for (match of getMatchesForRound(round); track match.id) {
-                                      <div class="relative w-64">
-                                          <div class="bg-slate-900 border rounded-lg shadow-lg overflow-hidden transition-all" 
-                                               [class.border-[#ccff00]]="isMatchHighlighted(match)" 
-                                               [class.shadow-[0_0_15px_rgba(204,255,0,0.2)]]="isMatchHighlighted(match)"
-                                               [class.border-slate-700]="!isMatchHighlighted(match)">
-                                              
-                                              <div class="p-3 space-y-2">
-                                                  <div class="flex justify-between items-center text-sm p-1 rounded" 
-                                                       [class.text-white]="match.winner === match.p1"
-                                                       [class.text-slate-400]="match.winner !== match.p1"
-                                                       [class.bg-[#ccff00]/10]="isMatchHighlighted(match) && match.p1.toLowerCase().includes(searchQuery().toLowerCase())">
-                                                      <span class="truncate font-medium" [class.text-slate-600]="match.p1 === 'TBD'">{{ match.p1 }}</span>
-                                                      @if(match.isFinished && match.winner === match.p1){ <i class="fas fa-check text-[#ccff00] text-xs"></i> }
-                                                  </div>
-                                                  <div class="border-t border-slate-800"></div>
-                                                  <div class="flex justify-between items-center text-sm p-1 rounded"
-                                                       [class.text-white]="match.winner === match.p2"
-                                                       [class.text-slate-400]="match.winner !== match.p2"
-                                                       [class.bg-[#ccff00]/10]="isMatchHighlighted(match) && match.p2.toLowerCase().includes(searchQuery().toLowerCase())">
-                                                      <span class="truncate font-medium" [class.text-slate-600]="match.p2 === 'TBD'">{{ match.p2 }}</span>
-                                                      @if(match.isFinished && match.winner === match.p2){ <i class="fas fa-check text-[#ccff00] text-xs"></i> }
-                                                  </div>
-                                              </div>
-                                              <div class="bg-slate-950 px-2 py-1 text-xs text-center text-[#ccff00] font-mono border-t border-slate-800">
-                                                  {{ match.score || 'Scheduled' }}
-                                              </div>
+                          <div *ngFor="let round of rounds()" class="flex flex-col justify-around gap-16 relative py-12">
+                              <h3 class="absolute top-0 w-full text-center font-bold text-slate-500 uppercase tracking-[0.2em] text-xs">{{ getRoundName(round) }}</h3>
+                              
+                              <div *ngFor="let match of getMatchesForRound(round)" class="relative w-64">
+                                  <div class="bg-slate-900 border rounded-lg shadow-lg overflow-hidden transition-all" 
+                                       [class.border-[#ccff00]]="isMatchHighlighted(match)" 
+                                       [class.shadow-[0_0_15px_rgba(204,255,0,0.2)]]="isMatchHighlighted(match)"
+                                       [class.border-slate-700]="!isMatchHighlighted(match)">
+                                      
+                                      <div class="p-3 space-y-2">
+                                          <div class="flex justify-between items-center text-sm p-1 rounded" 
+                                               [class.text-white]="match.winner === match.p1"
+                                               [class.text-slate-400]="match.winner !== match.p1"
+                                               [class.bg-[#ccff00]/10]="isMatchHighlighted(match) && match.p1.toLowerCase().includes(searchQuery().toLowerCase())">
+                                              <span class="truncate font-medium" [class.text-slate-600]="match.p1 === 'TBD'">{{ match.p1 }}</span>
+                                              @if(match.isFinished && match.winner === match.p1){ <i class="fas fa-check text-[#ccff00] text-xs"></i> }
                                           </div>
-                                          
-                                           @if (round !== 'F') {
-                                             <div class="absolute top-1/2 -right-12 w-12 h-px bg-slate-700 hidden md:block"></div>
-                                          }
+                                          <div class="border-t border-slate-800"></div>
+                                          <div class="flex justify-between items-center text-sm p-1 rounded"
+                                               [class.text-white]="match.winner === match.p2"
+                                               [class.text-slate-400]="match.winner !== match.p2"
+                                               [class.bg-[#ccff00]/10]="isMatchHighlighted(match) && match.p2.toLowerCase().includes(searchQuery().toLowerCase())">
+                                              <span class="truncate font-medium" [class.text-slate-600]="match.p2 === 'TBD'">{{ match.p2 }}</span>
+                                              @if(match.isFinished && match.winner === match.p2){ <i class="fas fa-check text-[#ccff00] text-xs"></i> }
+                                          </div>
                                       </div>
+                                      <div class="bg-slate-950 px-2 py-1 text-xs text-center text-[#ccff00] font-mono border-t border-slate-800">
+                                          {{ match.score || 'Scheduled' }}
+                                      </div>
+                                  </div>
+                                  
+                                   @if (round !== 'F') {
+                                     <div class="absolute top-1/2 -right-12 w-12 h-px bg-slate-700 hidden md:block"></div>
                                   }
                               </div>
-                          }
+                          </div>
                       </div>
                   }
               </div>
