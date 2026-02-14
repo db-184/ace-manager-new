@@ -29,18 +29,14 @@ import { TournamentStore, Match } from '../services/tournament.store';
                        [class.border-slate-700]="!match.isFinished">
                       
                       <div class="p-4 space-y-3">
-                          <div class="flex justify-between items-center p-2 rounded transition-colors" 
-                               [class.bg-[#ccff00]/10]="match.winner === match.p1 && match.isFinished"
-                               [class.bg-slate-800]="!(match.winner === match.p1 && match.isFinished)">
+                          <div class="flex justify-between items-center p-2 rounded transition-colors" [class.bg-[#ccff00]/10]="match.winner === match.p1 && match.isFinished" [class.bg-slate-800]="!(match.winner === match.p1 && match.isFinished)">
                               <span class="font-bold text-sm truncate text-white" [class.text-slate-500]="match.p1 === 'TBD'">{{ match.p1 }}</span>
                               <i *ngIf="match.isFinished && match.winner === match.p1" class="fas fa-check text-[#ccff00] text-xs"></i>
                           </div>
                           
                           <div class="border-t border-dashed border-slate-700 my-1"></div>
 
-                          <div class="flex justify-between items-center p-2 rounded transition-colors" 
-                               [class.bg-[#ccff00]/10]="match.winner === match.p2 && match.isFinished"
-                               [class.bg-slate-800]="!(match.winner === match.p2 && match.isFinished)">
+                          <div class="flex justify-between items-center p-2 rounded transition-colors" [class.bg-[#ccff00]/10]="match.winner === match.p2 && match.isFinished" [class.bg-slate-800]="!(match.winner === match.p2 && match.isFinished)">
                               <span class="font-bold text-sm truncate text-white" [class.text-slate-500]="match.p2 === 'TBD'">{{ match.p2 }}</span>
                               <i *ngIf="match.isFinished && match.winner === match.p2" class="fas fa-check text-[#ccff00] text-xs"></i>
                           </div>
