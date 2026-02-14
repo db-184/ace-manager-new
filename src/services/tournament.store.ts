@@ -238,15 +238,15 @@ export class TournamentStore {
     }
   }
 
-  createNewTournament() {
-      this.resetData();
-      const newId = Date.now().toString();
-      this.currentTournamentId.set(newId);
-      this.saveState();
-      this.subscribeToTournament(newId);
-      this.adminState.set('details');
-      this.currentStep.set(1);
-  }
+createNewTournament() {
+    this.resetData();
+    const newId = Date.now().toString();
+    this.currentTournamentId.set(newId);
+    // Remove this line: this.saveState();
+    this.subscribeToTournament(newId);
+    this.adminState.set('details');
+    this.currentStep.set(1);
+}
 
   loadAdminTournament(id: string) {
       this.currentTournamentId.set(id);
