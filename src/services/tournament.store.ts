@@ -387,7 +387,7 @@ export class TournamentStore {
   goHome() { this.currentView.set('landing'); this.currentTournamentId.set(null); }
   goToLogin() { this.currentView.set('login'); }
   login(e: string, p?: string) {
-    if (e === 'admin@acemanager.com' && p === 'admin123') {
+    if (e === 'admin@acemanager.com' && p === 'manage#tourney@789') {
         this.isAuthenticated.set(true); this.currentUser.set(e);
         this.currentView.set('admin'); this.adminState.set('hub');
         return true;
