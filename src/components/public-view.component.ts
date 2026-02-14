@@ -84,9 +84,7 @@ import { TournamentStore, Match } from '../services/tournament.store';
                                 </tr>
                             </thead>
                             <tbody class="bg-slate-900 divide-y divide-slate-800">
-                                <tr *ngFor="let stat of getStandings(group.id); let i = index" 
-                                    [class.bg-[#ccff00]/10]="searchQuery() && stat.name.toLowerCase().includes(searchQuery().toLowerCase())" 
-                                    class="hover:bg-slate-800/50 transition-colors">
+                                <tr *ngFor="let stat of getStandings(group.id); let i = index" [class.bg-[#ccff00]/10]="searchQuery() && stat.name.toLowerCase().includes(searchQuery().toLowerCase())" class="hover:bg-slate-800/50 transition-colors">
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500 font-mono">{{ i + 1 }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-white flex items-center">
                                         {{ stat.name }}
@@ -139,18 +137,12 @@ import { TournamentStore, Match } from '../services/tournament.store';
                                        [class.border-slate-700]="!isMatchHighlighted(match)">
                                       
                                       <div class="p-3 space-y-2">
-                                          <div class="flex justify-between items-center text-sm p-1 rounded" 
-                                               [class.text-white]="match.winner === match.p1"
-                                               [class.text-slate-400]="match.winner !== match.p1"
-                                               [class.bg-[#ccff00]/10]="isMatchHighlighted(match) && match.p1.toLowerCase().includes(searchQuery().toLowerCase())">
+                                          <div class="flex justify-between items-center text-sm p-1 rounded" [class.text-white]="match.winner === match.p1" [class.text-slate-400]="match.winner !== match.p1" [class.bg-[#ccff00]/10]="isMatchHighlighted(match) && match.p1.toLowerCase().includes(searchQuery().toLowerCase())">
                                               <span class="truncate font-medium" [class.text-slate-600]="match.p1 === 'TBD'">{{ match.p1 }}</span>
                                               <i *ngIf="match.isFinished && match.winner === match.p1" class="fas fa-check text-[#ccff00] text-xs"></i>
                                           </div>
                                           <div class="border-t border-slate-800"></div>
-                                          <div class="flex justify-between items-center text-sm p-1 rounded"
-                                               [class.text-white]="match.winner === match.p2"
-                                               [class.text-slate-400]="match.winner !== match.p2"
-                                               [class.bg-[#ccff00]/10]="isMatchHighlighted(match) && match.p2.toLowerCase().includes(searchQuery().toLowerCase())">
+                                          <div class="flex justify-between items-center text-sm p-1 rounded" [class.text-white]="match.winner === match.p2" [class.text-slate-400]="match.winner !== match.p2" [class.bg-[#ccff00]/10]="isMatchHighlighted(match) && match.p2.toLowerCase().includes(searchQuery().toLowerCase())">
                                               <span class="truncate font-medium" [class.text-slate-600]="match.p2 === 'TBD'">{{ match.p2 }}</span>
                                               <i *ngIf="match.isFinished && match.winner === match.p2" class="fas fa-check text-[#ccff00] text-xs"></i>
                                           </div>
