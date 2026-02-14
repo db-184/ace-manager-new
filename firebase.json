@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "dist/acemanager---tennis-admin/browser",
+    "public": "dist/ace-manager-new",
     "rewrites": [
       {
         "source": "**",
