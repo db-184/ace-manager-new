@@ -238,15 +238,15 @@ export class TournamentStore {
     }
   }
 
-createNewTournament() {
-    this.resetData();
-    const newId = Date.now().toString();
-    this.currentTournamentId.set(newId);
-    // Remove this line: this.saveState();
-    this.subscribeToTournament(newId);
-    this.adminState.set('details');
-    this.currentStep.set(1);
-}
+  createNewTournament() {
+      this.resetData();
+      const newId = Date.now().toString();
+      this.currentTournamentId.set(newId);
+      // Removed saveState() here - it will be called when user enters settings in step 1
+      this.subscribeToTournament(newId);
+      this.adminState.set('details');
+      this.currentStep.set(1);
+  }
 
   loadAdminTournament(id: string) {
       this.currentTournamentId.set(id);
